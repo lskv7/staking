@@ -4,72 +4,98 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-error TransferFailed();
-error NeedsMoreThanZero();
+    error TransferFailed();
+    error NeedsMoreThanZero();
 
 contract Staking is ReentrancyGuard {
-    IERC20 public s_rewardsToken;
-    IERC20 public s_stakingToken;
+    IERC20 public rewardToken;
+    /*IERC20 public s_stakingToken;*/
+
+    struct Pool {
+        address token;
+        address oracle;
+        uint rewardRate;
+        uint rewardPerTokenStored;
+        uint totalSupply;
+        uint lastUpdateTime;
+    }
+
+    struct UserInfoPerPool {
+        uint userRewardPerTokenPaid;
+        uint balance;
+        uint rewards;
+    }
+
+    // mapping(address=>mapping(address => uint)) public s_userRewardPerTokenPaid;
+    mapping(address => mapping(address => UserInfoPerPool)) internal userInfosPerPool;
+    mapping(address => Pool) internal pools;
+
 
     // This is the reward token per second
     // Which will be multiplied by the tokens the user staked divided by the total
     // This ensures a steady reward rate of the platform
     // So the more users stake, the less for everyone who is staking.
-    uint256 public constant REWARD_RATE = 100;
-    uint256 public s_lastUpdateTime;
-    uint256 public s_rewardPerTokenStored;
+    /*    uint public constant REWARD_RATE = 100;
+        uint public s_lastUpdateTime;
+        uint public s_rewardPerTokenStored;
 
-    mapping(address => uint256) public s_userRewardPerTokenPaid;
-    mapping(address => uint256) public s_rewards;
+        mapping(address => uint) public s_userRewardPerTokenPaid;
+        mapping(address => uint) public s_rewards;
 
-    uint256 private s_totalSupply;
-    mapping(address => uint256) public s_balances;
+        uint private s_totalSupply;
+        mapping(address => uint) public s_balances;*/
 
-    event Staked(address indexed user, uint256 indexed amount);
-    event WithdrewStake(address indexed user, uint256 indexed amount);
-    event RewardsClaimed(address indexed user, uint256 indexed amount);
+    event Staked(address indexed user, address token, uint indexed amount);
+    event WithdrewStake(address indexed user, address token, uint indexed amount);
+    event RewardsClaimed(address indexed user, address token, uint indexed amount);
 
-    constructor(address stakingToken, address rewardsToken) {
-        s_stakingToken = IERC20(stakingToken);
-        s_rewardsToken = IERC20(rewardsToken);
+    constructor(address rewardsToken) {
+        rewardToken = IERC20(rewardsToken);
+    }
+
+
+    function createPool(address _tokenAddress, address _oracle, uint _rewardRate) external {
+        require(pools[_tokenAddress].token != _tokenAddress, "pool already exists");
+        pools[_tokenAddress] = Pool({token : _tokenAddress, oracle : _oracle, rewardRate : _rewardRate, rewardPerTokenStored : 0, totalSupply : 0, lastUpdateTime : 0});
     }
 
     /**
      * @notice How much reward a token gets based on how long it's been in and during which "snapshots"
      */
-    function rewardPerToken() public view returns (uint256) {
-        if (s_totalSupply == 0) {
-            return s_rewardPerTokenStored;
+    function rewardPerToken(address _tokenAddress) internal view returns (uint) {
+        Pool memory _pool = pools[_tokenAddress];
+        if (_pool.totalSupply == 0) {
+            return _pool.rewardPerTokenStored;
         }
         return
-            s_rewardPerTokenStored +
-            (((block.timestamp - s_lastUpdateTime) * REWARD_RATE * 1e18) / s_totalSupply);
+        _pool.rewardPerTokenStored +
+        (((block.timestamp - _pool.lastUpdateTime) * _pool.rewardRate * 1e18) / _pool.totalSupply);
     }
 
     /**
      * @notice How much reward a user has earned
      */
-    function earned(address account) public view returns (uint256) {
+    function earned(address account, address _tokenAddress) public view returns (uint) {
+        UserInfoPerPool storage _userInfoPerPool = userInfosPerPool[account][_tokenAddress];
         return
-            ((s_balances[account] * (rewardPerToken() - s_userRewardPerTokenPaid[account])) /
-                1e18) + s_rewards[account];
+        ((_userInfoPerPool.balance * (rewardPerToken(_tokenAddress) - _userInfoPerPool.userRewardPerTokenPaid)) /
+        1e18) + _userInfoPerPool.rewards;
     }
 
     /**
      * @notice Deposit tokens into this contract
      * @param amount | How much to stake
      */
-    function stake(uint256 amount)
-        external
-        updateReward(msg.sender)
-        nonReentrant
-        moreThanZero(amount)
+    function stake(uint amount, address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant moreThanZero(amount)
     {
-        s_totalSupply += amount;
-        s_balances[msg.sender] += amount;
-        emit Staked(msg.sender, amount);
-        bool success = s_stakingToken.transferFrom(msg.sender, address(this), amount);
+        Pool storage _pool = pools[_tokenAddress];
+        UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
+        _pool.totalSupply += amount;
+        _userInfoForThisPool.balance += amount;
+        emit Staked(msg.sender, _tokenAddress, amount);
+        bool success = IERC20(_tokenAddress).transferFrom(msg.sender, address(this), amount);
         if (!success) {
             revert TransferFailed();
         }
@@ -79,24 +105,33 @@ contract Staking is ReentrancyGuard {
      * @notice Withdraw tokens from this contract
      * @param amount | How much to withdraw
      */
-    function withdraw(uint256 amount) external updateReward(msg.sender) nonReentrant {
-        s_totalSupply -= amount;
-        s_balances[msg.sender] -= amount;
-        emit WithdrewStake(msg.sender, amount);
-        bool success = s_stakingToken.transfer(msg.sender, amount);
+    function withdraw(uint amount, address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant {
+        Pool storage _pool = pools[_tokenAddress];
+        UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
+
+        _pool.totalSupply -= amount;
+        _userInfoForThisPool.balance -= amount;
+        emit WithdrewStake(msg.sender, _tokenAddress, amount);
+        bool success = IERC20(_tokenAddress).transfer(msg.sender, amount);
         if (!success) {
             revert TransferFailed();
         }
     }
 
+
     /**
      * @notice User claims their tokens
      */
-    function claimReward() external updateReward(msg.sender) nonReentrant {
-        uint256 reward = s_rewards[msg.sender];
-        s_rewards[msg.sender] = 0;
-        emit RewardsClaimed(msg.sender, reward);
-        bool success = s_rewardsToken.transfer(msg.sender, reward);
+    function claimReward(address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant {
+        UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
+        uint rewardFromPool = _userInfoForThisPool.rewards;
+        (,int __price,,,)=AggregatorV3Interface(pools[_tokenAddress].oracle).latestRoundData();
+        uint _price=uint(__price);
+        uint reward = _price*rewardFromPool;
+        _userInfoForThisPool.rewards = 0;
+        emit RewardsClaimed(msg.sender, _tokenAddress, reward);
+
+        bool success = rewardToken.transfer(msg.sender, reward);
         if (!success) {
             revert TransferFailed();
         }
@@ -105,28 +140,21 @@ contract Staking is ReentrancyGuard {
     /********************/
     /* Modifiers Functions */
     /********************/
-    modifier updateReward(address account) {
-        s_rewardPerTokenStored = rewardPerToken();
-        s_lastUpdateTime = block.timestamp;
-        s_rewards[account] = earned(account);
-        s_userRewardPerTokenPaid[account] = s_rewardPerTokenStored;
+    modifier updateReward(address account, address _tokenAddress) {
+        Pool storage _pool = pools[_tokenAddress];
+        UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
+        _pool.rewardPerTokenStored = rewardPerToken(_tokenAddress);
+        _pool.lastUpdateTime = block.timestamp;
+        _userInfoForThisPool.rewards = earned(account, _tokenAddress);
+        _userInfoForThisPool.userRewardPerTokenPaid = _pool.rewardPerTokenStored;
         _;
     }
 
-    modifier moreThanZero(uint256 amount) {
+    modifier moreThanZero(uint amount) {
         if (amount == 0) {
             revert NeedsMoreThanZero();
         }
         _;
     }
 
-    /********************/
-    /* Getter Functions */
-    /********************/
-    // Ideally, we'd have getter functions for all our s_ variables we want exposed, and set them all to private.
-    // But, for the purpose of this demo, we've left them public for simplicity.
-
-    function getStaked(address account) public view returns (uint256) {
-        return s_balances[account];
-    }
 }
