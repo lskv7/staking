@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import { MoralisProvider } from "react-moralis"
-import Imgexp from "/styles/Expliimg.png"
+// import Imgexp from "../pages/Expliimg.png"
 
 
 function MyApp({ Component, pageProps }) {
@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
     <><MoralisProvider initializeOnMount={false}>
       <Component {...pageProps} />
     </MoralisProvider>
-             <img className="p-8" rel="icon" type="png" href="Expliimg.png" src={ Imgexp } alt="explimg"></img>
+             <img className="p-4 h-2/3 object-center " rel="icon" type="png" href="Expliimg.png" src= '/Expliimg.png'  alt="explimg"></img>
   </>
   )
 }
