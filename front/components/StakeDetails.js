@@ -54,15 +54,17 @@ export default function StakeDetails() {
         const formattedRtBalanceFromContract = ethers.utils.formatUnits(rtBalanceFromContract, "ether")
         setRtBalance(formattedRtBalanceFromContract)
 
-        const stakedFromContract = (await getStakedBalance({ onError: (error) => console.log(error) })).toString()
-        const formattedStakedFromContract = ethers.utils.formatUnits(stakedFromContract, "ether")
-        setStakedBalance(formattedStakedFromContract)
+        // const stakedFromContract = (await getStakedBalance({ onError: (error) => console.log(error) })).toString()
+        // const formattedStakedFromContract = ethers.utils.formatUnits(stakedFromContract, "ether")
+        // setStakedBalance(formattedStakedFromContract)
 
-        const earnedFromContract = (await getEarned({ onError: (error) => console.log(error) })).toString()
-        const formattedEarnedFromContract = ethers.utils.formatUnits(earnedFromContract, "ether")
-        setEarnedBalance(formattedEarnedFromContract)
+        // const earnedFromContract = (await getEarned({ onError: (error) => console.log(error) })).toString()
+        // const formattedEarnedFromContract = ethers.utils.formatUnits(earnedFromContract, "ether")
+        // setEarnedBalance(formattedEarnedFromContract)
     }
-    return (<><div>Rt Balance is : {rtBalance}</div>
-        <div>Earned Balance is : {earnedBalance}</div>
-        <div>Staked Balance is : {stakedBalance}</div></>)
+    return (<>
+        <div>Rt Balance is : {rtBalance}</div>
+        {/* <div>Earned Balance is : {earnedBalance}</div>
+        <div>Staked Balance is : {stakedBalance}</div> */}
+    </>)
 }
