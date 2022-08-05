@@ -10,7 +10,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         ? 1
         : VERIFICATION_BLOCK_CONFIRMATIONS
     log("----------------------------------------------------")
-    const args = [rewardToken.address, rewardToken.address]
+    const args = [rewardToken.address]
     const stakingDeployment = await deploy("Staking", {
         from: deployer,
         args: args,

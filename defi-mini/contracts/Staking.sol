@@ -11,7 +11,6 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract Staking is ReentrancyGuard {
     IERC20 public rewardToken;
-    /*IERC20 public s_stakingToken;*/
 
     struct Pool {
         address token;
@@ -30,41 +29,27 @@ contract Staking is ReentrancyGuard {
 
     // mapping(address=>mapping(address => uint)) public s_userRewardPerTokenPaid;
     mapping(address => mapping(address => UserInfoPerPool)) internal userInfosPerPool;
-    mapping(address => Pool) internal pools;
-
-
-    // This is the reward token per second
-    // Which will be multiplied by the tokens the user staked divided by the total
-    // This ensures a steady reward rate of the platform
-    // So the more users stake, the less for everyone who is staking.
-    /*    uint public constant REWARD_RATE = 100;
-        uint public s_lastUpdateTime;
-        uint public s_rewardPerTokenStored;
-
-        mapping(address => uint) public s_userRewardPerTokenPaid;
-        mapping(address => uint) public s_rewards;
-
-        uint private s_totalSupply;
-        mapping(address => uint) public s_balances;*/
+    mapping(address => Pool) public pools;
 
     event Staked(address indexed user, address token, uint indexed amount);
     event WithdrewStake(address indexed user, address token, uint indexed amount);
     event RewardsClaimed(address indexed user, address token, uint indexed amount);
+    event PoolCreated(address indexed tokenAddress, address oracle, uint _rewardRate);
 
     constructor(address rewardsToken) {
         rewardToken = IERC20(rewardsToken);
     }
 
-
-    function createPool(address _tokenAddress, address _oracle, uint _rewardRate) external {
+    function createPool(address _tokenAddress, address _oracle, uint _rewardRate) external  {
         require(pools[_tokenAddress].token != _tokenAddress, "pool already exists");
         pools[_tokenAddress] = Pool({token : _tokenAddress, oracle : _oracle, rewardRate : _rewardRate, rewardPerTokenStored : 0, totalSupply : 0, lastUpdateTime : 0});
+        emit PoolCreated(_tokenAddress, _oracle, _rewardRate);
     }
 
     /**
      * @notice How much reward a token gets based on how long it's been in and during which "snapshots"
      */
-    function rewardPerToken(address _tokenAddress) internal view returns (uint) {
+    function rewardPerToken(address _tokenAddress) public view returns (uint) {
         Pool memory _pool = pools[_tokenAddress];
         if (_pool.totalSupply == 0) {
             return _pool.rewardPerTokenStored;
@@ -121,6 +106,7 @@ contract Staking is ReentrancyGuard {
 
     /**
      * @notice User claims their tokens
+     * @dev TODO not a good solution to get the reward, improve this
      */
     function claimReward(address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant {
         UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
