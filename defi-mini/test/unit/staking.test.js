@@ -81,7 +81,9 @@ const SECONDS_IN_A_YEAR = 31449600
                 const _claim=await staking.claimReward(dai.address);
                 const result = await _claim.wait();
                 console.log("1")
-                console.log(result)
+                console.log(result.events)
+                console.log(result.logs)
+
                 console.log("2")
 /*
                 const balanceBefore = await rewardToken.balanceOf(deployer.address)

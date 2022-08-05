@@ -33,14 +33,14 @@ contract Staking is ReentrancyGuard {
 
     event Staked(address indexed user, address token, uint indexed amount);
     event WithdrewStake(address indexed user, address token, uint indexed amount);
-    event RewardsClaimed(address indexed user, address token, uint indexed amount);
+    event RewardsClaimed(address indexed user, address token, uint indexed amount, int price, uint uprice);
     event PoolCreated(address indexed tokenAddress, address oracle, uint _rewardRate);
 
     constructor(address rewardsToken) {
         rewardToken = IERC20(rewardsToken);
     }
 
-    function createPool(address _tokenAddress, address _oracle, uint _rewardRate) external  {
+    function createPool(address _tokenAddress, address _oracle, uint _rewardRate) external {
         require(pools[_tokenAddress].token != _tokenAddress, "pool already exists");
         pools[_tokenAddress] = Pool({token : _tokenAddress, oracle : _oracle, rewardRate : _rewardRate, rewardPerTokenStored : 0, totalSupply : 0, lastUpdateTime : 0});
         emit PoolCreated(_tokenAddress, _oracle, _rewardRate);
@@ -111,12 +111,11 @@ contract Staking is ReentrancyGuard {
     function claimReward(address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant {
         UserInfoPerPool storage _userInfoForThisPool = userInfosPerPool[msg.sender][_tokenAddress];
         uint rewardFromPool = _userInfoForThisPool.rewards;
-        (,int __price,,,)=AggregatorV3Interface(pools[_tokenAddress].oracle).latestRoundData();
-        uint _price=uint(__price);
-        uint reward = _price*rewardFromPool;
+        (,int __price,,,) = AggregatorV3Interface(pools[_tokenAddress].oracle).latestRoundData();
+        uint _price = uint(__price);
+        uint reward = _price * rewardFromPool;
         _userInfoForThisPool.rewards = 0;
-        emit RewardsClaimed(msg.sender, _tokenAddress, reward);
-
+        emit RewardsClaimed(msg.sender, _tokenAddress, reward, __price, _price);
         bool success = rewardToken.transfer(msg.sender, reward);
         if (!success) {
             revert TransferFailed();
