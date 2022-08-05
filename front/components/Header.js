@@ -1,4 +1,12 @@
 import { ConnectButton } from "@web3uikit/web3"
+import ImgLogo from "/styles/Logo.png"
+
 export default function Header() {
-    return <ConnectButton moralisAuth={false} />
+    return <>
+      <div class=" bg-[#102039] grid grid-cols-3 p-5 w-screen">
+             <img className="p-8" rel="icon" type="image/png" href="logo.png" src={ ImgLogo } alt="logo"></img>
+          <div class="text-slate-50 text-center py-8 pr-9 text-4xl font-serif"> BlockFi </div>
+         <div><ConnectButton class="flex justify-end my-6 mr-3" moralisAuth={false} /></div>
+       </div>
+    </>
 }

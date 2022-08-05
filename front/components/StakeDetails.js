@@ -62,7 +62,11 @@ export default function StakeDetails() {
         const formattedEarnedFromContract = ethers.utils.formatUnits(earnedFromContract, "ether")
         setEarnedBalance(formattedEarnedFromContract)
     }
-    return (<><div>Rt Balance is : {rtBalance}</div>
-        <div>Earned Balance is : {earnedBalance}</div>
-        <div>Staked Balance is : {stakedBalance}</div></>)
+    return <>
+      <div class="flex space-x-9 pl-10 flex-row place-content-center py-8 ">
+           <><div class="font-mono p-3 border-2 border-[#102039] rounded-lg border-4 bg-[#CCCCCC] text-white " >Rt Balance is : {rtBalance}</div>
+           <div class="font-mono p-3 border-2 border-[#102039] rounded-lg border-4 bg-[#CCCCCC] text-white ">Earned Balance is : {earnedBalance}</div>
+          <div class="font-mono p-3 border-2 border-[#102039] rounded-lg border-4 bg-[#CCCCCC] text-white ">Staked Balance is : {stakedBalance}</div></> 
+     </div>
+        </>
 }

@@ -48,7 +48,7 @@ export default function StakeForm() {
 
     return (
         <div>
-            <Form
+            <Form class="flex text-slate-50 justify-center "
                 onSubmit={handleStakeSubmit}
                 data={[
                     {
@@ -59,7 +59,7 @@ export default function StakeForm() {
                         key: "amountToStake",
                     },
                 ]}
-                title="Let's stake !"
+                title ="Let's stake !"
             ></Form>
         </div>
     )
