@@ -1,21 +1,19 @@
 /* eslint-disable unused-imports/no-unused-vars-ts */
 import '~~/styles/main-page.css';
-import {GenericContract} from 'eth-components/ant/generic-contract';
-import {useContractReader, useBalance, useEthersAdaptorFromProviderOrSigners, useEventListener} from 'eth-hooks';
+import {useBalance, useEthersAdaptorFromProviderOrSigners} from 'eth-hooks';
 import {useEthersAppContext} from 'eth-hooks/context';
 import {useDexEthPrice} from 'eth-hooks/dapps';
 import {asEthersAdaptor} from 'eth-hooks/functions';
 import React, {FC, useEffect, useState} from 'react';
 import {BrowserRouter, Switch} from 'react-router-dom';
 
-import {MainPageFooter, MainPageHeader, createTabsAndRoutes, TContractPageList} from '../components/main';
+import {createTabsAndRoutes, MainPageFooter, MainPageHeader, TContractPageList} from '../components/main';
 
 import {useAppContracts, useConnectAppContracts, useLoadAppContracts} from '~common/components/context';
 import {useCreateAntNotificationHolder} from '~common/components/hooks/useAntNotification';
 import {useBurnerFallback} from '~common/components/hooks/useBurnerFallback';
 import {useScaffoldAppProviders} from '~common/components/hooks/useScaffoldAppProviders';
 import {NETWORKS} from '~common/constants';
-import {useScaffoldHooksExamples} from '~~/components/hooks/useScaffoldHooksExamples';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
@@ -77,7 +75,7 @@ export const MainPage: FC = () => {
   // 🎉 Console logs & More hook examples:
   // 🚦 disable this hook to stop console logs
   // 🏹🏹🏹 go here to see how to use hooks!
-  useScaffoldHooksExamples(scaffoldAppProviders);
+//  useScaffoldHooksExamples(scaffoldAppProviders);
 
   // -----------------------------
   // These are the contracts!

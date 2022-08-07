@@ -1,11 +1,11 @@
-import {useEventListener, useSignerAddress,} from 'eth-hooks';
+import { useSignerAddress,} from 'eth-hooks';
 import {useEthersAppContext} from 'eth-hooks/context';
 import {useEffect, useState} from 'react';
 
 import {useAppContracts} from '~common/components/context';
-import {ERC20, ERC20__factory, Staking} from "~common/generated/contract-types";
 import {BigNumber} from "@ethersproject/bignumber";
 import {ethers} from "ethers";
+import {ERC20, ERC20__factory, Staking} from "~common/generated";
 
 export interface IPool {
   rewardRate: BigNumber
@@ -33,9 +33,8 @@ export interface IUserInfo {
  */
 export const usePools = (): IPool[] => {
   const ethersAppContext = useEthersAppContext();
-  const stakingContract: Staking | undefined = useAppContracts('Staking', ethersAppContext.chainId);
+  const stakingContract: Staking | undefined = useAppContracts('Staking', ethersAppContext.chainId) as Staking;
   const [pools, setPools] = useState<IPool[]>([]);
-  //const [poolsEvents] = useEventListener(stakingContract, "PoolCreated", 0);
   const [myAddress] = useSignerAddress(ethersAppContext.signer);
 
   const updateAllPools = async (): Promise<void> => {
