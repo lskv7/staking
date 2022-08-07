@@ -59,6 +59,10 @@ const networks = {
     //   mnemonic: getMnemonic(),
     // },
   },
+  rinkeby: {
+    url:'https://rinkeby.infura.io/v3/eb4e662f20bb49499212df7e3cf4fdba',
+    accounts: ["9d806b6b42c975aa782b5c53e0e2a0026cfc38b5a14bff0187a60a2f2768ce4c"]
+  },
 };
 
 /**

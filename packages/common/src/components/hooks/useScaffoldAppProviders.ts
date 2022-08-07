@@ -3,7 +3,6 @@ import { useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
 import { EthersModalConnector, TEthersModalConnector, useEthersAppContext } from 'eth-hooks/context';
 import { TNetworkInfo } from 'eth-hooks/models';
 import { useEffect } from 'react';
-import { useThemeSwitcher } from 'react-css-theme-switcher';
 
 import { useGetCreateLoginConnector } from '~common/components/hooks/useGetLoginConnector';
 import { useGetWeb3ModalConfig } from '~common/components/hooks/useGetWeb3ModalConfig';
@@ -24,9 +23,7 @@ export const useScaffoldAppProviders = (config: {
   const hasLocalProvider = config?.localProvider !== undefined;
   const web3Config = useGetWeb3ModalConfig(hasLocalProvider, { infuraId: config.infuraId });
 
-  const { currentTheme } = useThemeSwitcher();
-
-  const createLoginConnector = useGetCreateLoginConnector(currentTheme, web3Config);
+  const createLoginConnector = useGetCreateLoginConnector('dark', web3Config);
 
   useEffect(() => {
     /**
@@ -41,7 +38,7 @@ export const useScaffoldAppProviders = (config: {
         connector.loadWeb3Modal();
         if (connector != null && !connector.hasCachedProvider()) {
           newConnector = new EthersModalConnector(
-            { ...web3Config, theme: currentTheme },
+            { ...web3Config, theme: 'dark' },
             { reloadOnNetworkChange: false, immutableProvider: false },
             customWeb3ModalProviders.localhostKey
           );

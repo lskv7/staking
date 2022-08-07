@@ -25,3 +25,14 @@
 .ant-statistic-content{
   overflow: scroll;
 }
+
+.ant-divider{
+  background-color: unset!important;
+}
+:root{
+  background-color:#102039!important;
+}
+
+.ant-layout{
+  padding:30px 200px 90px 200px!important;
+}

@@ -1,5 +1,8 @@
-import { lazier } from 'eth-hooks/helpers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { formatEther } from '@ethersproject/units';
 
-// the components and pages are lazy loaded for performance and bundle size reasons
-// code is in the component file
-
+export const bigIntegerToFixed = (bn: BigNumber, decimals: number): string => {
+  let res = formatEther(bn);
+  res = (+res).toFixed(4);
+  return res;
+};

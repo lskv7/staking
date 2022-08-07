@@ -1,21 +1,21 @@
-import {Button, Form, Input, Modal} from 'antd';
-import {useEthersAppContext} from 'eth-hooks/context';
-import React, {FC, useContext, useState} from 'react';
-import {getNetworkInfo} from '~common/functions';
-import {transactor} from "eth-components/functions";
-import {EthComponentsSettingsContext} from "eth-components/models";
-import {useGasPrice} from "eth-hooks";
-import {Staking} from "~common/generated/contract-types";
-import {useAppContracts} from "~common/components/context";
+import { Button, Form, Input, Modal } from 'antd';
+import { transactor } from 'eth-components/functions';
+import { EthComponentsSettingsContext } from 'eth-components/models';
+import { useGasPrice } from 'eth-hooks';
+import { useEthersAppContext } from 'eth-hooks/context';
+import React, { FC, useContext, useState } from 'react';
+
+import { useAppContracts } from '~common/components/context';
+import { getNetworkInfo } from '~common/functions';
+import { Staking } from '~common/generated/contract-types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface ICreatePoolProps {
-}
+export interface ICreatePoolProps {}
 
 interface IPoolForm {
-  tokenAddress: string
-  oracle: string
-  rewardRate: number
+  tokenAddress: string;
+  oracle: string;
+  rewardRate: number;
 }
 
 export const CreatePool: FC<ICreatePoolProps> = (props) => {
@@ -29,15 +29,17 @@ export const CreatePool: FC<ICreatePoolProps> = (props) => {
 
   const onValidate = async (values: IPoolForm): Promise<void> => {
     await tx!(stakingContract?.createPool(values.tokenAddress, values.oracle, values.rewardRate), (update: any) => {
-      setVisible(false)
+      setVisible(false);
       if (update.status === 1) {
-        console.log("Pool created!")
+        console.log('Pool created!');
       }
     });
-  }
+  };
   return (
     <>
-      <Button type="primary" onClick={(): void => setVisible(true)}>Create new Pool</Button>
+      <Button type="primary" size={'large'} onClick={(): void => setVisible(true)}>
+        Create new Pool
+      </Button>
       <Modal
         visible={visible}
         title="Create a new Pool"
@@ -57,14 +59,14 @@ export const CreatePool: FC<ICreatePoolProps> = (props) => {
         }}>
         <Form form={form} name="pool-form" preserve={false}>
           {/* //onFinish={onFinish}>*/}
-          <Form.Item name="oracle" label="Oracle Feed" rules={[{required: true}]}>
-            <Input type={'string'}/>
+          <Form.Item name="oracle" label="Oracle Feed" rules={[{ required: true }]}>
+            <Input type={'string'} />
           </Form.Item>
-          <Form.Item name="tokenAddress" label="Token Address" rules={[{required: true}]}>
-            <Input type={'string'}/>
+          <Form.Item name="tokenAddress" label="Token Address" rules={[{ required: true }]}>
+            <Input type={'string'} />
           </Form.Item>
-          <Form.Item name="rewardRate" label="Reward Rate" rules={[{required: true}]}>
-            <Input type={'number'}/>
+          <Form.Item name="rewardRate" label="Reward Rate" rules={[{ required: true }]}>
+            <Input type={'number'} />
           </Form.Item>
         </Form>
       </Modal>

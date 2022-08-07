@@ -1,5 +1,5 @@
 import { getNetwork } from '@ethersproject/networks';
-import { Alert, PageHeader } from 'antd';
+import { Alert } from 'antd';
 import { Account } from 'eth-components/ant';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { useGasPrice } from 'eth-hooks';
@@ -46,8 +46,8 @@ export const MainPageHeader: FC<IMainPageHeaderProps> = (props) => {
   const left = (
     <>
       <div>
-        <div className={"bg-[#102039] grid grid-cols-3 p-5 w-screen"}>
-          <img className={"p-4 h-24"}  src='assets/Logo.png' alt="logo"></img>
+        <div className={'bg-[#102039] grid grid-cols-3 p-5 w-screen'}>
+          <img className={'p-4 h-24'} src="assets/Logo.png" alt="logo"></img>
           <div className="text-slate-50 text-center py-8 pr-9 text-4xl font-serif"> BlockFi</div>
         </div>
       </div>

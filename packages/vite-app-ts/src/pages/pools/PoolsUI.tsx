@@ -1,22 +1,21 @@
-import React, {FC} from 'react';
-import {CreatePool} from "~~/components/pools/createPool";
-import {Pools} from '~~/components/pools/Pools';
-import {Divider, Layout} from "antd";
+import { Divider, Layout } from 'antd';
+import React, { FC } from 'react';
+
+import { CreatePool } from '~~/components/pools/createPool';
+import { Pools } from '~~/components/pools/Pools';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PoolsProps {
-}
+export interface PoolsProps {}
 
 export const PoolsUI: FC<PoolsProps> = (props) => {
-
   return (
-    <Layout style={{padding:"90px"}}>
+    <Layout style={{ padding: '90px' }}>
       <Layout.Header>
-        <CreatePool/>
+        <CreatePool />
       </Layout.Header>
-      <Divider/>
+      <Divider />
       <Layout.Content>
-        <Pools/>
+        <Pools />
       </Layout.Content>
     </Layout>
   );

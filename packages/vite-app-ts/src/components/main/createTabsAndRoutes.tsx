@@ -44,6 +44,7 @@ export const createTabsAndRoutes = (
     <Menu
       style={{
         textAlign: 'center',
+        justifyContent: 'center',
       }}
       selectedKeys={[route]}
       mode="horizontal">

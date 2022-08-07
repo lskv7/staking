@@ -1,19 +1,21 @@
 /* eslint-disable unused-imports/no-unused-vars-ts */
 import '~~/styles/main-page.css';
-import {useBalance, useEthersAdaptorFromProviderOrSigners} from 'eth-hooks';
-import {useEthersAppContext} from 'eth-hooks/context';
-import {useDexEthPrice} from 'eth-hooks/dapps';
-import {asEthersAdaptor} from 'eth-hooks/functions';
-import React, {FC, useEffect, useState} from 'react';
-import {BrowserRouter, Switch} from 'react-router-dom';
+import { useBalance, useEthersAdaptorFromProviderOrSigners } from 'eth-hooks';
+import { useEthersAppContext } from 'eth-hooks/context';
+import { useDexEthPrice } from 'eth-hooks/dapps';
+import { asEthersAdaptor } from 'eth-hooks/functions';
+import React, { FC, useEffect, useState } from 'react';
+import { BrowserRouter, Switch } from 'react-router-dom';
 
-import {createTabsAndRoutes, MainPageFooter, MainPageHeader, TContractPageList} from '../components/main';
+import { createTabsAndRoutes, MainPageFooter, MainPageHeader, TContractPageList } from '../components/main';
 
-import {useAppContracts, useConnectAppContracts, useLoadAppContracts} from '~common/components/context';
-import {useCreateAntNotificationHolder} from '~common/components/hooks/useAntNotification';
-import {useBurnerFallback} from '~common/components/hooks/useBurnerFallback';
-import {useScaffoldAppProviders} from '~common/components/hooks/useScaffoldAppProviders';
-import {NETWORKS} from '~common/constants';
+import { PoolsUI } from './pools/PoolsUI';
+
+import { useAppContracts, useConnectAppContracts, useLoadAppContracts } from '~common/components/context';
+import { useCreateAntNotificationHolder } from '~common/components/hooks/useAntNotification';
+import { useBurnerFallback } from '~common/components/hooks/useBurnerFallback';
+import { useScaffoldAppProviders } from '~common/components/hooks/useScaffoldAppProviders';
+import { NETWORKS } from '~common/constants';
 import {
   BURNER_FALLBACK_ENABLED,
   CONNECT_TO_BURNER_AUTOMATICALLY,
@@ -22,7 +24,6 @@ import {
   MAINNET_PROVIDER,
   TARGET_NETWORK_INFO,
 } from '~~/config/app.config';
-import {PoolsUI} from './pools/PoolsUI';
 
 /** ********************************
  * ⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️
@@ -75,7 +76,7 @@ export const MainPage: FC = () => {
   // 🎉 Console logs & More hook examples:
   // 🚦 disable this hook to stop console logs
   // 🏹🏹🏹 go here to see how to use hooks!
-//  useScaffoldHooksExamples(scaffoldAppProviders);
+  //  useScaffoldHooksExamples(scaffoldAppProviders);
 
   // -----------------------------
   // These are the contracts!
@@ -87,7 +88,7 @@ export const MainPage: FC = () => {
   const mainnetDai = useAppContracts('DAI', NETWORKS.mainnet.chainId);
 
   // keep track of a variable from the contract in the local React state:
-/*
+  /*
   const [purpose, update] = useContractReader(
     yourContract,
     yourContract?.purpose,
@@ -121,25 +122,21 @@ export const MainPage: FC = () => {
   // -----------------------------
   // This is the list of tabs and their contents
   const pageList: TContractPageList = {
-    mainPage:       {
+    mainPage: {
       name: 'Pools',
-      content: (
-        <PoolsUI />
-      ),
+      content: <PoolsUI />,
     },
-    pages: [
-
-    ],
+    pages: [],
   };
-  const {routeContent: tabContents, tabMenu} = createTabsAndRoutes(pageList, route, setRoute);
+  const { routeContent: tabContents, tabMenu } = createTabsAndRoutes(pageList, route, setRoute);
 
   // -----------------------------
   // 📃 Render the react components
   // -----------------------------
 
   return (
-    <div className="App" >
-      <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice}/>
+    <div className="App">
+      <MainPageHeader scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
       {/* Routes should be added between the <Switch> </Switch> as seen below */}
       <BrowserRouter>
         {tabMenu}
@@ -154,8 +151,8 @@ export const MainPage: FC = () => {
         </Switch>
       </BrowserRouter>
 
-      <MainPageFooter scaffoldAppProviders={scaffoldAppProviders} price={ethPrice}/>
-      <div style={{position: 'absolute'}}>{notificationHolder}</div>
+      <MainPageFooter scaffoldAppProviders={scaffoldAppProviders} price={ethPrice} />
+      <div style={{ position: 'absolute' }}>{notificationHolder}</div>
     </div>
   );
 };
