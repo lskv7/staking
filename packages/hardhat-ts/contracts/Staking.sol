@@ -129,7 +129,6 @@ contract Staking is ReentrancyGuard {
 
   /**
    * @notice User claims their tokens
-   * @dev TODO not a good solution to get the reward, improve this
    * @param _tokenAddress address of the pool's token
    */
   function claimReward(address _tokenAddress) external updateReward(msg.sender, _tokenAddress) nonReentrant {

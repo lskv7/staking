@@ -1,10 +1,14 @@
 # BlockFi
-Staking Dapp
+[Staking Dapp](https://stakingalyra.web.app/)
+Deployed on rinkeby 
 
 # Team
 * Mathieu G.
 * Hugo D.
 * Guillaume Q.
+
+## Demo
+![Demo video](BlockFi.mov)
 
 ## Directories
 
@@ -69,3 +73,5 @@ Running the app
 Vite  app folders has `.env` files. To create local variables that overrride these, create a file called `.env.local`, or `.env.development.local` or `.env.production.local` and put your overrides in there.
 
 You can set your `TARGET_NETWORK` with them.
+
+

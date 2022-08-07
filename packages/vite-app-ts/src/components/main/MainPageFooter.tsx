@@ -103,7 +103,7 @@ export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
 
   return (
     <>
-      <Divider />
+      <Divider style={{ margin: '1px 0' }} />
       <div className="flex footer" style={{ justifyContent: 'space-between' }}>
         <div>
           <img src="assets/Alyralogo.png" alt=""></img>
