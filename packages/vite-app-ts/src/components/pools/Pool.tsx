@@ -23,7 +23,6 @@ export const Pool: FC<IPoolProps> = (props) => {
   const contract: ERC20 = new ethers.Contract(pool.token, ERC20__factory.abi, ethersAppContext.provider) as ERC20;
   const [myAddress] = useSignerAddress(ethersAppContext.signer);
   const [balance] = useTokenBalance(contract, myAddress!);
-  console.log(contract.address, balance);
   return (
     <>
       <List.Item
@@ -44,7 +43,7 @@ export const Pool: FC<IPoolProps> = (props) => {
             <Progress
               type="circle"
               percent={
-                pool.userInfo.balance.isZero() ? 0 : pool.totalSupply.div(pool.userInfo.balance).toNumber() * 100
+                pool.userInfo.balance.isZero() ? 0 : pool.userInfo.balance.div(pool.totalSupply).toNumber() * 100
               }
             />
           </Col>
