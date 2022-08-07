@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { createConnectorForExternalContract, createConnectorForHardhatContract } from 'eth-hooks/context';
+import {
+  createConnectorForExternalAbi,
+  createConnectorForExternalContract,
+  createConnectorForHardhatContract
+} from 'eth-hooks/context';
 import { invariant } from 'ts-invariant';
 
 import { externalContractsAddressMap } from './externalContracts.config';
@@ -7,6 +11,7 @@ import { externalContractsAddressMap } from './externalContracts.config';
 import * as hardhatContracts from '~common/generated/contract-types';
 import * as externalContracts from '~common/generated/external-contracts/esm/types';
 import hardhatDeployedContractsJson from '~common/generated/hardhat_contracts.json';
+import {MockERC20__factory} from "~common/generated/contract-types";
 
 /**
  * ⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️
@@ -26,15 +31,14 @@ export const getAppContractsConfig = () => {
       // --------------------------------------------------
       // 🙋🏽‍♂️ Add your hadrdhat contracts here
       // --------------------------------------------------
-      YourContract: createConnectorForHardhatContract(
-        'YourContract',
-        hardhatContracts.YourContract__factory,
+      Staking: createConnectorForHardhatContract(
+        'Staking',
+        hardhatContracts.Staking__factory,
         hardhatDeployedContractsJson
       ),
-
-      YourNFT: createConnectorForHardhatContract(
-        'YourNFT',
-        hardhatContracts.YourNFT__factory,
+      RewardToken: createConnectorForHardhatContract(
+        'RewardToken',
+        hardhatContracts.RewardToken__factory,
         hardhatDeployedContractsJson
       ),
 
@@ -43,19 +47,20 @@ export const getAppContractsConfig = () => {
       // --------------------------------------------------
       DAI: createConnectorForExternalContract('DAI', externalContracts.DAI__factory, externalContractsAddressMap),
 
+
       // --------------------------------------------------
       // 🙋🏽‍♂️ Add your external abi here (unverified contracts)`
       // --------------------------------------------------
-      // YourContract: createConnectorForExternalAbi(
-      //   'YourContract',
+      // WBTC: createConnectorForExternalAbi(
+      //   'WBTC',
       //   {
-      //     [TARGET_NETWORK_INFO.chainId]: {
+      //     [31337]: {
       //       address: 'xxx',
-      //       chainId: TARGET_NETWORK_INFO.chainId,
+      //       chainId: 31337,
       //     },
       //   },
-      //   hardhatContracts.YourContract__factory.abi,
-      //   hardhatContracts.YourContract__factory.connect
+      //   hardhatContracts.MockERC20__factory.abi,
+      //   hardhatContracts.MockERC20__factory.connect
       // ),
     } as const;
 

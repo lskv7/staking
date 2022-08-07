@@ -38,6 +38,8 @@
     "@scaffold-eth/common": "0.0.0",
     "@uniswap/sdk": "^3.0.3",
     "@uniswap/token-lists": "^1.0.0-beta.30",
+    "@web3uikit/core": "^0.1.4",
+    "@web3uikit/icons": "^0.1.4",
     "antd": "^4.22.3",
     "buffer": "^6.0.3",
     "daisyui": "^2.20.0",

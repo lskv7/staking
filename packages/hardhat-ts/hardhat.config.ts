@@ -91,6 +91,16 @@ export const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: "0.6.7",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      }
+
     ],
   },
   mocha: {

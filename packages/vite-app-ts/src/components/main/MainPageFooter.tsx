@@ -1,13 +1,13 @@
-import { Row, Col, Button } from 'antd';
-import { Faucet, GasGauge } from 'eth-components/ant';
-import { useEthersAppContext } from 'eth-hooks/context';
-import React, { FC } from 'react';
+import {Row, Col, Button, Layout} from 'antd';
+import {Faucet, GasGauge} from 'eth-components/ant';
+import {useEthersAppContext} from 'eth-hooks/context';
+import React, {FC} from 'react';
 
-import { Ramp, ThemeSwitcher, getFaucetAvailable } from '~common/components';
-import { NETWORKS } from '~common/constants';
-import { getNetworkInfo } from '~common/functions';
-import { IScaffoldAppProviders } from '~common/models';
-import { FAUCET_ENABLED } from '~~/config/app.config';
+import {Ramp, ThemeSwitcher, getFaucetAvailable} from '~common/components';
+import {NETWORKS} from '~common/constants';
+import {getNetworkInfo} from '~common/functions';
+import {IScaffoldAppProviders} from '~common/models';
+import {FAUCET_ENABLED} from '~~/config/app.config';
 
 export interface IMainPageFooterProps {
   scaffoldAppProviders: IScaffoldAppProviders;
@@ -39,7 +39,7 @@ export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
       }}>
       <Row align="middle" gutter={[4, 4]}>
         <Col span={8}>
-          <Ramp price={props.price} address={ethersAppContext?.account ?? ''} networks={NETWORKS} />
+          <Ramp price={props.price} address={ethersAppContext?.account ?? ''} networks={NETWORKS}/>
         </Col>
 
         <Col
@@ -101,12 +101,16 @@ export const MainPageFooter: FC<IMainPageFooterProps> = (props) => {
     </div>
   );
 
-  const right = <ThemeSwitcher />;
+  const right = <ThemeSwitcher/>;
 
   return (
-    <>
-      {left}
-      {right}
-    </>
+      <div className="flex footer" style={{justifyContent:"space-between"}}>
+        <div>
+          <img src='assets/Alyralogo.png' alt=""></img>
+        </div>
+        <div>
+          <img  src='assets/Copyright.png' alt=""></img>
+        </div>
+      </div>
   );
 };

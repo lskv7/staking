@@ -1,3 +1,27 @@
 .App {
   text-align: center;
 }
+
+.ant-list-item-meta-title{
+  font-size: 30px!important;
+}
+
+.ant-typography, .Balance {
+  color:#1890ff!important;
+}
+
+.ant-layout-header{
+  background-color: unset!important;
+}
+
+.flex{
+  background-color: #102039;
+  height:130px;
+}
+.flex img{
+  height: 130px;
+}
+
+.ant-statistic-content{
+  overflow: scroll;
+}
