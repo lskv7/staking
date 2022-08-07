@@ -9,7 +9,6 @@ export interface IPoolsProps {}
 
 export const Pools: FC<IPoolsProps> = (props) => {
   const pools: IPool[] = usePools();
-  console.log(pools);
   return (
     <div style={{ width: '100%' }}>
       <List

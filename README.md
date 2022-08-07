@@ -1,6 +1,11 @@
 # BlockFi
 Staking Dapp
 
+# Team
+* Mathieu G.
+* Hugo D.
+* Guillaume Q.
+
 ## Directories
 
 

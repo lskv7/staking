@@ -85,6 +85,10 @@ export const usePools = (): IPool[] => {
     stakingContract?.on('RewardsClaimed', async (): Promise<void> => {
       await updateAllPools();
     });
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    stakingContract?.on('WithdrewStake', async (): Promise<void> => {
+      await updateAllPools();
+    });
   }, [stakingContract, ethersAppContext.signer, myAddress]);
 
   return pools;

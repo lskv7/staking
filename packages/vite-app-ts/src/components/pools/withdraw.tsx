@@ -1,4 +1,5 @@
 import { MinusCircleOutlined } from '@ant-design/icons';
+import { parseEther } from '@ethersproject/units';
 import { Button, Form, Input, Modal } from 'antd';
 import { transactor } from 'eth-components/functions';
 import { EthComponentsSettingsContext } from 'eth-components/models';
@@ -30,7 +31,7 @@ export const Withdraw: FC<IWithdrawProps> = (props) => {
   const stakingContract: Staking | undefined = useAppContracts('Staking', ethersAppContext.chainId);
 
   const onValidate = async (values: IWithdrawForm): Promise<void> => {
-    await tx!(stakingContract?.withdraw(values.amount, pool.token), (update: any) => {
+    await tx!(stakingContract?.withdraw(parseEther(values.amount.toString()), pool.token), (update: any) => {
       setVisible(false);
       if (update.status === 1) {
         console.log('Withdraw done!');

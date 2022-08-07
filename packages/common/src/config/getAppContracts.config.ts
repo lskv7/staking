@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  createConnectorForExternalAbi,
-  createConnectorForExternalContract,
-  createConnectorForHardhatContract
-} from 'eth-hooks/context';
+import { createConnectorForExternalContract, createConnectorForHardhatContract } from 'eth-hooks/context';
 import { invariant } from 'ts-invariant';
 
 import { externalContractsAddressMap } from './externalContracts.config';
@@ -11,7 +7,6 @@ import { externalContractsAddressMap } from './externalContracts.config';
 import * as hardhatContracts from '~common/generated/contract-types';
 import * as externalContracts from '~common/generated/external-contracts/esm/types';
 import hardhatDeployedContractsJson from '~common/generated/hardhat_contracts.json';
-import {MockERC20__factory} from "~common/generated/contract-types";
 
 /**
  * ⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️⛳️
@@ -46,7 +41,6 @@ export const getAppContractsConfig = () => {
       // 🙋🏽‍♂️ Add your external contracts here, make sure to define the address in `externalContractsConfig.ts`Í
       // --------------------------------------------------
       DAI: createConnectorForExternalContract('DAI', externalContracts.DAI__factory, externalContractsAddressMap),
-
 
       // --------------------------------------------------
       // 🙋🏽‍♂️ Add your external abi here (unverified contracts)`

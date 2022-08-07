@@ -1,6 +1,11 @@
 import { Col, List, Progress, Row, Statistic } from 'antd';
+import { useSignerAddress } from 'eth-hooks';
+import { useEthersAppContext } from 'eth-hooks/context';
+import { useTokenBalance } from 'eth-hooks/erc';
+import { ethers } from 'ethers';
 import React, { FC } from 'react';
 
+import { ERC20, ERC20__factory } from '~common/generated/contract-types';
 import { IPool } from '~~/components/hooks/usePools';
 import { Reward } from '~~/components/pools/reward';
 import { Stake } from '~~/components/pools/stake';
@@ -14,6 +19,11 @@ export interface IPoolProps {
 
 export const Pool: FC<IPoolProps> = (props) => {
   const { pool } = props;
+  const ethersAppContext = useEthersAppContext();
+  const contract: ERC20 = new ethers.Contract(pool.token, ERC20__factory.abi, ethersAppContext.provider) as ERC20;
+  const [myAddress] = useSignerAddress(ethersAppContext.signer);
+  const [balance] = useTokenBalance(contract, myAddress!);
+  console.log(contract.address, balance);
   return (
     <>
       <List.Item
@@ -27,7 +37,7 @@ export const Pool: FC<IPoolProps> = (props) => {
         <List.Item.Meta
           avatar={<></>}
           title={pool.name}
-          description={`${pool.name} pool with total supply of ${pool.totalSupply}`}
+          description={`${pool.name} pool with total supply of ${bigIntegerToFixed(pool.totalSupply, 4)}`}
         />
         <Row gutter={20} style={{ display: 'flex', justifyContent: 'center' }}>
           <Col span={4}>
@@ -49,7 +59,7 @@ export const Pool: FC<IPoolProps> = (props) => {
             <Statistic title="Total Supply" value={bigIntegerToFixed(pool.totalSupply, 4)} />
           </Col>
           <Col span={4}>
-            <Statistic title={`Your ${pool.symbol} balance`} value={bigIntegerToFixed(pool.tokenBalance, 4)} />
+            <Statistic title={`Your ${pool.symbol} balance`} value={bigIntegerToFixed(balance, 4)} />
           </Col>
         </Row>
       </List.Item>

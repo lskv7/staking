@@ -1,5 +1,5 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { transactor } from 'eth-components/functions';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { useGasPrice } from 'eth-hooks';
@@ -26,6 +26,7 @@ export const Reward: FC<IRewardProps> = (props) => {
   const onClick = async (): Promise<void> => {
     await tx!(stakingContract?.claimReward(pool.token), (update: any) => {
       if (update.status === 1) {
+        void message.success(`Good job ! you get ${update.value} reward`);
         console.log(update);
         console.log('reward ok  !');
       }

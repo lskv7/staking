@@ -5,12 +5,12 @@ const func: DeployFunction = async (hre: THardhatRuntimeEnvironmentExtended) => 
   const { getNamedAccounts, deployments } = hre;
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
-  await deploy("RewardToken", {
+  await deploy('RewardToken', {
     from: deployer,
     args: [],
     log: true,
     waitConfirmations: 1,
-  })
+  });
 
   /*
     // Getting a previously deployed contract

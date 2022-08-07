@@ -24,7 +24,7 @@ console.log('init app...');
 const BLOCKNATIVE_DAPPID = import.meta.env.VITE_KEY_BLOCKNATIVE_DAPPID;
 
 // load saved theme
-const savedTheme = window.localStorage.getItem('theme') ?? 'light';
+const savedTheme = window.localStorage.getItem('theme') ?? 'dark';
 
 // setup themes for theme switcher
 const themes = {
@@ -51,7 +51,7 @@ const ProviderWrapper: FC<{ children?: ReactNode }> = (props) => {
     <EthComponentsSettingsContext.Provider value={ethComponentsSettings}>
       <EthersAppContext disableDefaultQueryClientRoot={true}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <ThemeSwitcherProvider themeMap={themes} defaultTheme={savedTheme ?? 'light'}>
+          <ThemeSwitcherProvider themeMap={themes} defaultTheme={savedTheme ?? 'dark'}>
             <ErrorBoundary FallbackComponent={ErrorFallback}>{props.children}</ErrorBoundary>
           </ThemeSwitcherProvider>
         </ErrorBoundary>
