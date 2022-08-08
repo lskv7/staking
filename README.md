@@ -8,9 +8,8 @@ Deployed on rinkeby
 * Guillaume Q.
 
 ## Demo
-![Demo video](BlockFi.mov)
-BlockFi.mov
-BlockFi.mp4
+![Demo video](Blockfi.gif)
+
 ## Directories
 
 
