@@ -9,7 +9,8 @@ Deployed on rinkeby
 
 ## Demo
 ![Demo video](BlockFi.mov)
-
+BlockFi.mov
+BlockFi.mp4
 ## Directories
 
 
