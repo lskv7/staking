@@ -47,6 +47,11 @@ Running the app
    yarn start
    ```
    
+4. test the contracts
+   ```bash
+   yarn test
+   ```
+   
 5. other commands
 
    ```bash
