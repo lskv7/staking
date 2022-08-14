@@ -1,9 +1,12 @@
 import { assert, expect } from 'chai';
 import { BigNumber } from 'ethers';
-import { deployments, ethers } from 'hardhat';
+import hre, { ethers } from 'hardhat';
+import { getHardhatSigners } from 'tasks/functions/accounts';
 
 import { moveBlocks } from '../utils/move-blocks';
 import { moveTime } from '../utils/move-time';
+
+import { Staking__factory } from '~common/generated';
 
 const SECONDS_IN_A_DAY = 86400;
 const SECONDS_IN_A_YEAR = 31449600;
@@ -11,10 +14,13 @@ const SECONDS_IN_A_YEAR = 31449600;
 describe('Staking Unit Tests', function () {
   // eslint-disable-next-line unused-imports/no-unused-vars-ts
   let staking: any, rewardToken: any, deployer: any, dai: any, stakeAmount: BigNumber, daiETHPriceFeed: any;
+
   beforeEach(async () => {
+    const { deployer } = await getHardhatSigners(hre);
+    const factory = new Staking__factory(deployer);
+    staking = await factory.deploy();
     const accounts = await ethers.getSigners();
     deployer = accounts[0];
-    await deployments.fixture(['mock', 'rewardtoken', 'staking']);
 
     staking = await ethers.getContract('Staking');
     dai = await ethers.getContract('DAI');
@@ -22,7 +28,6 @@ describe('Staking Unit Tests', function () {
     rewardToken = await ethers.getContract('RewardToken');
     stakeAmount = ethers.utils.parseEther('100000');
   });
-
   describe('stake', () => {
     it('create pool', async () => {
       console.log(dai.address);
